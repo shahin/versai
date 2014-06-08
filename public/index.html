@@ -1,0 +1,56 @@
+
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://cpettitt.github.io/project/graphlib/latest/graphlib.min.js"></script>
+    <script src="./dagre-d3/build/dagre-d3.js"></script>
+
+    <style>
+      svg {
+        overflow: hidden;
+      }
+
+      .node rect {
+        stroke: #333;
+        stroke-width: 1px;
+        fill: #eee;
+      }
+
+      .edgeLabel rect {
+        fill: #fff;
+      }
+
+      .edgePath path {
+        stroke: #333;
+        stroke-width: 2px;
+        fill: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <svg width=800 height=600>
+      <g transform="translate(20, 20)"/>
+    </svg>
+
+    <script type="text/javascript">
+      d3.json('./dag.json', function(dag_json) {
+        var tasks = dag_json['nodes'].map(function(s) {
+          return { id: s, value: { label: s } };
+        });
+
+        var edges = dag_json['edges'];
+
+        var renderer = new dagreD3.Renderer();
+        var oldDrawNodes = renderer.drawNodes();
+        renderer.drawNodes(function(graph, root) {
+          var svgNodes = oldDrawNodes(graph,root);
+          svgNodes.attr("id", function(u) { return "node-" + u; });
+          return svgNodes;
+        });
+        var layout = renderer.run(dagreD3.json.decode(tasks, edges), d3.select("svg g"));
+      });
+    </script>
+
+  </body>
+</html>
