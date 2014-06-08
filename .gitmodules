@@ -1,0 +1,3 @@
+[submodule "public/dagre-d3"]
+	path = public/dagre-d3
+	url = https://github.com/cpettitt/dagre-d3.git
